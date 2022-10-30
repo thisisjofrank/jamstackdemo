@@ -1,5 +1,5 @@
 html {
-  height: 100vh;
+  height: calc(100vh - 6rem);
   padding: 3rem;
   margin: 0;
   font-family: sans-serif;
@@ -13,17 +13,13 @@ body {
   background-color: white;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-.chat{
+main {
     display: grid;
     grid-template-rows: 1fr 3rem;
     height: calc(100vh - 6rem);
 }
 
-.messages {
+#messages {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
