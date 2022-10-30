@@ -9,7 +9,7 @@ import * as Ably from "ably/promises";
     const ably = new Ably.Realtime.Promise({ authUrl: `/api/ably-token-request?clientId=${optionalClientId}` });
     const channel = ably.channels.get("some-channel-name");
 
-    const chatText = document.getElementById("chatText");
+    const messages = document.getElementById("messages");
     const form = document.getElementById("form");
     const input = document.getElementById("input") as HTMLInputElement;
 
@@ -25,12 +25,12 @@ import * as Ably from "ably/promises";
         console.log("Ably message received", msg);
 
         const author = msg.connectionId === ably.connection.id ? "me" : "other";
-        var messageElement = document.createElement("span");
+        var messageElement = document.createElement("div");
         messageElement.classList.add("message");
         messageElement.setAttribute("data-author", author);
         messageElement.innerHTML = msg.data;
 
-        chatText.appendChild(messageElement);
+        messages.appendChild(messageElement);
     });
 
 })();
