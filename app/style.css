@@ -78,12 +78,13 @@ button:hover {
 }
 
 @media (min-width: 700px) {
-  html {
+  body {
     display: grid;
     place-items: center;
   }
   
   main {
+    width: 100%;
     height: 90vh;
   }
 }
