@@ -1,4 +1,4 @@
-import { Types } from "ably";
+import { Types } from "ably/promises";
 import * as Ably from "ably/promises";
 
 (async () => {
@@ -6,15 +6,32 @@ import * as Ably from "ably/promises";
     console.log("Oh hai! 🖤");
 
     const optionalClientId = "optionalClientId"; // When not provided in authUrl, a default will be used.
-    const connection = new Ably.Realtime.Promise({ authUrl: `/api/ably-token-request?clientId=${optionalClientId}` });
-    const channel = connection.channels.get("some-channel-name");
+    const ably = new Ably.Realtime.Promise({ authUrl: `/api/ably-token-request?clientId=${optionalClientId}` });
+    const channel = ably.channels.get("some-channel-name");
+
+    const chatText = document.getElementById("chatText");
+    const form = document.getElementById("form");
+    const input = document.getElementById("input") as HTMLInputElement;
+
+    form.addEventListener("submit", (e:SubmitEvent) => {
+        e.preventDefault();
+
+        channel.publish({ name: "chat-message", data: input.value });
+        input.value = "";
+        input.focus();
+    })
 
     await channel.subscribe((msg: Types.Message) => {
         console.log("Ably message received", msg);
-        document.getElementById("response").innerHTML += "<br />" + JSON.stringify(msg);
+
+        const author = msg.connectionId === ably.connection.id ? "me" : "other";
+        var messageElement = document.createElement("span");
+        messageElement.classList.add("message");
+        messageElement.setAttribute("data-author", author);
+        messageElement.innerHTML = msg.data;
+
+        chatText.appendChild(messageElement);
     });
 
-    channel.publish("hello-world-message", { message: "Hello world!" });
 })();
 
-export { };
